@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+start() {
+    echo "Start"
+    mkdir dcrm
+    curl -sL $1 > dcrm/docker-compose.yml
+    cd dcrm
+    docker-compose up -d
+    cd ..
+    rm -rf dcrm
+    echo "Done"   
+}
+
+if [ -x "$(command -v docker)" ] & [ -x "$(command -v docker-compose)" ]; then
+    if (! docker stats --no-stream ); then
+        echo "ERROR: Please! Start run your Docker."
+        exit;
+    else
+        start $@;
+    fi
+    
+else
+    echo "ERROR: Required install the Docker and Docker-compose."
+    exit;
+fi
